@@ -46,11 +46,11 @@ deptoCopado(_, CantBanios):-
 
 esCaro(Barrio):-
     esBarrio(Barrio),
-    not((viveLocalidad(Persona, Barrio), viveEnViviendaBarata(Persona, Vivienda))).
+    not((viveLocalidad(Persona, Barrio), viveEnViviendaBarata(Persona))).
 
-viveEnViviendaBarata(Persona, Vivienda):-
-    not(viviendaBarata(Vivienda)).
-
+viveEnViviendaBarata(Persona):-
+    persona(Persona, Vivienda),
+    viviendaBarata(Vivienda).
 
 viviendaBarata(casa(MCuadrados)):-
     MCuadrados < 90.
@@ -61,3 +61,4 @@ viviendaBarata(depto(CantAmbientes, _)):-
 viviendaBarata(loft(AnioConstruccion)):-
     AnioConstruccion < 2005.
 
+% Punto 4
