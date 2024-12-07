@@ -84,7 +84,7 @@ comprarCasa(PlataRestante, Casa, ListaCasasCompradas):-
     pagarEIncluirCasa(PlataRestante, PrecioCasa, Duenio, ListaCasasCompradas).
 
 precioDuenioCasa(Casa, DuenioCasa, PrecioCasa):- 
-    valorCasa(_, PrecioCasa) = Casa. 
+    valorCasa(DuenioCasa, PrecioCasa) = Casa. 
 
 tieneDineroSuficiente(PlataRestante, PrecioCasa):-
     PlataRestante >= PrecioCasa.
