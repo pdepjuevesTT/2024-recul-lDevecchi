@@ -1,4 +1,5 @@
 % Solución en Prolog, alumno: Lucas Nahuel Devecchi Di Bella
+
 % Punto 1
 persona(juan, casa(120)).
 persona(fer, casa(110)).
@@ -15,14 +16,24 @@ viveLocalidad(vale, flores).
 viveLocalidad(fer, flores).
 
 % Punto 2
-vivenPropiedadesCopadas(Barrio):-
-    viveLocalidad(_, Barrio),
-    forall(viveLocalidad(Persona, Barrio), viviendaCopada(Persona)).
+barrioCopado(Barrio):-
+    esBarrio(Barrio),
+    forall(viveLocalidad(Persona, Barrio), personaConViviendaCopada(Persona)).
 
-viviendaCopada(persona(_, casa(MCuadrados))):-
+esBarrio(Barrio):-
+    viveLocalidad(_, Barrio).
+
+personaConViviendaCopada(Persona):-
+    persona(Persona, Vivienda),
+    viviendaCopada(Vivienda).
+
+viviendaCopada(casa(MCuadrados)):-
     MCuadrados > 100.
     
-viviendaCopada(persona(_, depto(CantAmbientes, CantBanios))):-
+viviendaCopada(loft(AnioConstruccion)):-
+    AnioConstruccion > 2015.
+
+viviendaCopada(depto(CantAmbientes, CantBanios)):-
     deptoCopado(CantAmbientes, CantBanios).
 
 deptoCopado(CantAmbientes, _):-
@@ -31,5 +42,13 @@ deptoCopado(CantAmbientes, _):-
 deptoCopado(_, CantBanios):-
     CantBanios > 1.
 
-viviendaCopada(persona(_, loft(AnioConstruccion))):-
-    AnioConstruccion > 2015.
+% Punto 3
+
+viviendaBarata(casa(MCuadrados)):-
+    AnioConstruccion < 2005.
+
+viviendaBarata(loft(AnioConstruccion)):-
+    AnioConstruccion < 2005.
+
+viviendaBarata(loft(AnioConstruccion)):-
+    AnioConstruccion < 2005.
