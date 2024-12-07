@@ -42,7 +42,7 @@ deptoCopado(CantAmbientes, _):-
 deptoCopado(_, CantBanios):-
     CantBanios > 1.
 
-% Punto 3 Todo: inversible
+% Punto 3
 
 esCaro(Barrio):-
     esBarrio(Barrio),
@@ -62,3 +62,18 @@ viviendaBarata(loft(AnioConstruccion)):-
     AnioConstruccion < 2005.
 
 % Punto 4
+valorCasa(juan,   150000).
+valorCasa(julian, 140000).
+valorCasa(vale,   95000).
+valorCasa(nico,   80000).
+valorCasa(alf,    75000).
+valorCasa(fer,    60000).
+
+queCasasCompra(PlataInicial, PlataRestante):-
+    PlataInicial < 3. % BORRAR
+sublista([],[]).
+
+sublista([_|Cola],Sublista):-
+    sublista(Cola, Sublista).
+
+sublista([Cabeza|Cola], [Cabeza|Sublista]):- sublista(Cola, Sublista).
