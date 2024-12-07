@@ -42,13 +42,22 @@ deptoCopado(CantAmbientes, _):-
 deptoCopado(_, CantBanios):-
     CantBanios > 1.
 
-% Punto 3
+% Punto 3 Todo: inversible
+
+esCaro(Barrio):-
+    esBarrio(Barrio),
+    not((viveLocalidad(Persona, Barrio), viveEnViviendaBarata(Persona, Vivienda))).
+
+viveEnViviendaBarata(Persona, Vivienda):-
+    not(viviendaBarata(Vivienda)).
+
 
 viviendaBarata(casa(MCuadrados)):-
-    AnioConstruccion < 2005.
+    MCuadrados < 90.
+
+viviendaBarata(depto(CantAmbientes, _)):-
+    CantAmbientes =< 2. % permite el caso en el que la cantAmbientes es negativa, por lo que puedo hacer un  ",CantAmbientes >= 1", pero entiendo que no es relevante para la resoluciòn del ejercicio.
 
 viviendaBarata(loft(AnioConstruccion)):-
     AnioConstruccion < 2005.
 
-viviendaBarata(loft(AnioConstruccion)):-
-    AnioConstruccion < 2005.
