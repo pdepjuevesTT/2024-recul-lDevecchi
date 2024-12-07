@@ -69,14 +69,27 @@ valorCasa(vale,   95000).
 valorCasa(julian, 140000).
 valorCasa(juan,   150000).
 
-queCasasCompra(PlataInicial, PlataRestante, ListaCasas):-
-    PlataRestante is PlataInicial,
-    obtenerListaPrecios(PlataInicial, ListaPrecios),
-    siguiente(ElementoAnterior, ElementoSiguiente, ListaPrecios).
+queCasasCompra(PlataInicial, PlataRestante, ListaCasasCompradas):-
+    PlataRestante is PlataInicial, % inicializo plataRestante
+    obtenerListaCasasPrecios(PlataInicial, ListaCasasParaComprar), % Obtengo lista de casas con precios.
+    comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas), % Agrego casa a la lista, y actualizo dinero
+    forall(siguiente(_, _, ListaCasasParaComprar), comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas)).
 
+obtenerListaCasasPrecios(PlataInicial, ListaPrecios):-
+    findall(valorCasa(Persona, Precio), (valorCasa(Persona, Precio), Precio =< PlataInicial), ListaPrecios).
 
-obtenerListaPrecios(PlataInicial, ListaPrecios):-
-    findall(Precio, (valorCasa(_, Precio), Precio =< PlataInicial), ListaPrecios).
+comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas):-
+    siguiente(CasaActual, _, ListaCasasParaComprar),
+    tieneDineroSuficiente(PlataRestante, CasaActual),
+    comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas),
+    pagarEIncluirCasa(PlataRestante, CasaActual, ListaCasasCompradas).
+
+pagarEIncluirCasa(PlataRestante, CasaActual, ListaCasasCompradas):-
+    PlataRestante is PlataRestante - CasaActual, 
+    nth0(0, ListaCasasCompradas, CasaActual).
+
+tieneDineroSuficiente(PlataRestante, PrecioCasaActual):-
+    PlataRestante >= PrecioCasaActual.
 
 siguiente(Anterior, Siguiente, Lista):-
     nth1(IndiceAnterior, Lista, Anterior),
