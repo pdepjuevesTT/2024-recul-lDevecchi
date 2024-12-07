@@ -73,7 +73,10 @@ queCasasCompra(PlataInicial, PlataRestante, ListaCasasCompradas):-
     PlataRestante is PlataInicial, % inicializo plataRestante
     obtenerListaCasasPrecios(PlataInicial, ListaCasasParaComprar), % Obtengo lista de casas con precios.
     comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas), % Agrego casa a la lista, y actualizo dinero
-    forall(member(Casa, ListaCasasParaComprar), comprarCasa(PlataRestante,Casa, ListaCasasCompradas)).
+    forall(member(Casa, ListaCasasParaComprar), comprarCasa(PlataRestante, Casa, ListaCasasCompradas)).
+    % Se deben incluir los elementos que pueden ser comprados a ListaCasasCompradas mediante sublista.
+    % Esto ocurre mientras la PlataRestante sea mayor o igual al costo de la siguiente casa a comprar.
+    % 
 
 obtenerListaCasasPrecios(PlataInicial, ListaPrecios):-
     findall(valorCasa(Persona, Precio), (valorCasa(Persona, Precio), Precio =< PlataInicial), ListaPrecios).
@@ -90,7 +93,7 @@ tieneDineroSuficiente(PlataRestante, PrecioCasa):-
     PlataRestante >= PrecioCasa.
 
 pagarEIncluirCasa(PlataRestante, PrecioCasa, Duenio, ListaCasasCompradas):-
-    PlataRestante is 300 - PrecioCasa,
+    PlataRestante is PlataRestante - PrecioCasa,
     sublista([Duenio], ListaCasasCompradas).
 
 sublista([], []). 
