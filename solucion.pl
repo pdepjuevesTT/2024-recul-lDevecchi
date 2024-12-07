@@ -62,18 +62,23 @@ viviendaBarata(loft(AnioConstruccion)):-
     AnioConstruccion < 2005.
 
 % Punto 4
-valorCasa(juan,   150000).
-valorCasa(julian, 140000).
-valorCasa(vale,   95000).
-valorCasa(nico,   80000).
-valorCasa(alf,    75000).
 valorCasa(fer,    60000).
+valorCasa(alf,    75000).
+valorCasa(nico,   80000).
+valorCasa(vale,   95000).
+valorCasa(julian, 140000).
+valorCasa(juan,   150000).
 
-queCasasCompra(PlataInicial, PlataRestante):-
-    PlataInicial < 3. % BORRAR
-sublista([],[]).
+queCasasCompra(PlataInicial, PlataRestante, ListaCasas):-
+    PlataRestante is PlataInicial,
+    obtenerListaPrecios(PlataInicial, ListaPrecios),
+    siguiente(ElementoAnterior, ElementoSiguiente, ListaPrecios).
 
-sublista([_|Cola],Sublista):-
-    sublista(Cola, Sublista).
 
-sublista([Cabeza|Cola], [Cabeza|Sublista]):- sublista(Cola, Sublista).
+obtenerListaPrecios(PlataInicial, ListaPrecios):-
+    findall(Precio, (valorCasa(_, Precio), Precio =< PlataInicial), ListaPrecios).
+
+siguiente(Anterior, Siguiente, Lista):-
+    nth1(IndiceAnterior, Lista, Anterior),
+    IndiceSiguiente is IndiceAnterior + 1,
+    nth1(IndiceSiguiente, Lista, Siguiente).
