@@ -73,24 +73,34 @@ queCasasCompra(PlataInicial, PlataRestante, ListaCasasCompradas):-
     PlataRestante is PlataInicial, % inicializo plataRestante
     obtenerListaCasasPrecios(PlataInicial, ListaCasasParaComprar), % Obtengo lista de casas con precios.
     comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas), % Agrego casa a la lista, y actualizo dinero
-    forall(sublista([_ | Cola], []), comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas)).
+    forall(member(Casa, ListaCasasParaComprar), comprarCasa(PlataRestante,Casa, ListaCasasCompradas)).
 
 obtenerListaCasasPrecios(PlataInicial, ListaPrecios):-
     findall(valorCasa(Persona, Precio), (valorCasa(Persona, Precio), Precio =< PlataInicial), ListaPrecios).
 
-comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas):-
-    tieneDineroSuficiente(PlataRestante, CasaActual),
-    comprarCasa(PlataRestante, ListaCasasParaComprar, ListaCasasCompradas),
-    pagarEIncluirCasa(PlataRestante, CasaActual, ListaCasasCompradas).
+comprarCasa(PlataRestante, Casa, ListaCasasCompradas):-
+    precioCasa(Casa, PrecioCasa),
+    tieneDineroSuficiente(PlataRestante, PrecioCasa),
+    pagarEIncluirCasa(PlataRestante, Casa, ListaCasasCompradas).
 
-pagarEIncluirCasa(PlataRestante, CasaActual, ListaCasasCompradas):-
-    PlataRestante is PlataRestante - CasaActual, 
-    nth0(0, ListaCasasCompradas, CasaActual).
+precioCasa(Casa, PrecioCasa):- 
+    valorCasa(_, PrecioCasa) = Casa. 
 
-tieneDineroSuficiente(PlataRestante, CasaActual):-
-    valorCasa(_, PrecioCasaActual) = CasaActual, 
-    PlataRestante >= PrecioCasaActual.
+tieneDineroSuficiente(PlataRestante, PrecioCasa):-
+    PlataRestante >= PrecioCasa.
 
-sublista([],[]).
-sublista([_ | Cola], Sublista):- sublista(Cola, Sublista).
-sublista([Cabeza | Cola],[Cabeza | Sublista]):- sublista(Cola, Sublista).
+pagarEIncluirCasa(PlataRestante, Casa, ListaCasasCompradas):-
+    precioCasa(Casa, PrecioCasa),
+    PlataRestante is PlataRestante - PrecioCasa, 
+    duenioCasa(Casa, Duenio),
+    sublista([Duenio], ListaCasasCompradas). % .
+
+duenioCasa(Casa, Duenio):- 
+    valorCasa(Duenio, _) = Casa. 
+
+sublista([],[]). % Caso base.
+sublista([_ | Cola], Sublista):- 
+    sublista(Cola, Sublista). % Saca primer elemento.
+
+sublista([Cabeza | Cola], [Cabeza | Sublista]):-
+    sublista(Cola, Sublista).
