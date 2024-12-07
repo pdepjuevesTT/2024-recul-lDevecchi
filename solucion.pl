@@ -79,28 +79,23 @@ obtenerListaCasasPrecios(PlataInicial, ListaPrecios):-
     findall(valorCasa(Persona, Precio), (valorCasa(Persona, Precio), Precio =< PlataInicial), ListaPrecios).
 
 comprarCasa(PlataRestante, Casa, ListaCasasCompradas):-
-    precioCasa(Casa, PrecioCasa),
+    precioDuenioCasa(Casa, Duenio, PrecioCasa),
     tieneDineroSuficiente(PlataRestante, PrecioCasa),
-    pagarEIncluirCasa(PlataRestante, Casa, ListaCasasCompradas).
+    pagarEIncluirCasa(PlataRestante, PrecioCasa, Duenio, ListaCasasCompradas).
 
-precioCasa(Casa, PrecioCasa):- 
+precioDuenioCasa(Casa, DuenioCasa, PrecioCasa):- 
     valorCasa(_, PrecioCasa) = Casa. 
 
 tieneDineroSuficiente(PlataRestante, PrecioCasa):-
     PlataRestante >= PrecioCasa.
 
-pagarEIncluirCasa(PlataRestante, Casa, ListaCasasCompradas):-
-    precioCasa(Casa, PrecioCasa),
-    PlataRestante is PlataRestante - PrecioCasa, 
-    duenioCasa(Casa, Duenio),
-    sublista([Duenio], ListaCasasCompradas). % .
+pagarEIncluirCasa(PlataRestante, PrecioCasa, Duenio, ListaCasasCompradas):-
+    PlataRestante is 300 - PrecioCasa,
+    sublista([Duenio], ListaCasasCompradas).
 
-duenioCasa(Casa, Duenio):- 
-    valorCasa(Duenio, _) = Casa. 
-
-sublista([],[]). % Caso base.
+sublista([], []). 
 sublista([_ | Cola], Sublista):- 
-    sublista(Cola, Sublista). % Saca primer elemento.
+    sublista(Cola, Sublista).
 
 sublista([Cabeza | Cola], [Cabeza | Sublista]):-
     sublista(Cola, Sublista).
